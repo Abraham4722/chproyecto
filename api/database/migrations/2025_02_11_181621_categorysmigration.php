@@ -11,7 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::create('categories', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('category_product', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('product_id');
+            $table->timestamps();
+        });
     }
 
     /**
