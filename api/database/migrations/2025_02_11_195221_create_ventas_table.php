@@ -16,6 +16,10 @@ return new class extends Migration
             $table->integer('usuario_id')->unsigned();
             $table->foreign('usuario_id')->references('id')->on('users');
             $table->decimal('total', 10, 2);
+            $table->string('estado');
+            $table->double('monto');
+            $table->integer('pedido_id');
+            
             $table->date('fecha_venta');
             $table->timestamps();
         });

@@ -24,6 +24,9 @@ return new class extends Migration
             $table->integer('talla_id')->unsigned();
             $table->foreign('talla_id')->references('id')->on('tallas');
 
+            $table->integer('marca_id')->unsigned();
+            $table->foreign('marca_id')->references('id')->on('marcas');
+
 
             
             $table->string('imagen')->nullable();
