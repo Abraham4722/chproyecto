@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('colores', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nombre'); // Ejemplo: Rojo, Azul, Verde
-            $table->string('codigo_hex')->nullable(); // Código de color en formato hexadecimal
+            $table->string('nombre');
+            $table->string('codigo_hex')->nullable();
             $table->timestamps();
         });
+        
         
     }
 

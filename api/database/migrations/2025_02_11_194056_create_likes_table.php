@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('likes', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
+        Schema::create('detalles_like', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->integer('like_id')->unsigned();
+            $table->foreign('like_id')->references('id')->on('likes');
             $table->timestamps();
         });
+        
         
     }
 

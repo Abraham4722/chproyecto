@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pedidos', function (Blueprint $table) {
+        Schema::create('direcciones', function (Blueprint $table) {
             $table->increments('id');
-            $table->foreignId('usuario_id')->constrained('usuarios');
-            $table->decimal('total', 10, 2);
-            $table->string('estado')->default('pendiente'); // Pendiente, Enviado, Completado, Cancelado
-            $table->dateTime('fecha_pedido');
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->string('calle');
+            $table->string('colonia');
+            $table->string('ciudad');
+            $table->string('estado');
+            $table->string('codigo_postal');
             $table->timestamps();
         });
         
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detalles_pedido');
+        Schema::dropIfExists('direccions');
     }
 };

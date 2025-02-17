@@ -13,14 +13,14 @@ return new class extends Migration
     {
         Schema::create('pagos', function (Blueprint $table) {
             $table->increments('id');
-            $table->foreignId('usuario_id');
-            $table->foreignId('producto_id')->constrained('productos');
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
             $table->decimal('monto', 10, 2);
-            $table->dateTime('fecha_pago');
             $table->string('metodo_pago');
-            $table->string('estado'); // Pagado, pendiente, rechazado
+            $table->date('fecha_pago');
             $table->timestamps();
         });
+        
         
     }
 

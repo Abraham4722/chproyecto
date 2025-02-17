@@ -11,15 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detalles_pedido', function (Blueprint $table) {
+        Schema::create('pedidos', function (Blueprint $table) {
             $table->increments('id');
-            $table->foreignId('pedido_id')->constrained('pedidos');
-            $table->foreignId('producto_id')->constrained('productos');
-            $table->integer('cantidad');
-            $table->decimal('precio_unitario', 10, 2);
-            $table->decimal('subtotal', 10, 2);
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->decimal('total', 10, 2);
+            $table->string('estado')->default('pendiente');
+            $table->date('fecha_pedido');
             $table->timestamps();
         });
+        
+        
         
     }
 

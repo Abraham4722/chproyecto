@@ -11,14 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('likes', function (Blueprint $table) {
+        Schema::create('detalles_pedido', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('usuario_id')->unsigned();
-            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->integer('pedido_id')->unsigned();
+            $table->foreign('pedido_id')->references('id')->on('pedidos');
             $table->integer('producto_id')->unsigned();
             $table->foreign('producto_id')->references('id')->on('productos');
+            $table->integer('cantidad');
+            $table->decimal('precio', 10, 2);
             $table->timestamps();
         });
+        
+        
         
     }
 
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('likes_publicaciones');
+        Schema::dropIfExists('detalles_pedido');
     }
 };

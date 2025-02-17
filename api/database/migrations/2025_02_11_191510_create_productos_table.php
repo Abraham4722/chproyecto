@@ -17,8 +17,15 @@ return new class extends Migration
             $table->text('descripcion');
             $table->decimal('precio', 8, 2);
             $table->integer('stock');
-            $table->foreignId('categoria_id')->constrained('categorias');
-            $table->foreignId('talla_id')->constrained('tallas');
+
+            $table->integer('categoria_id')->unsigned();
+            $table->foreign('categoria_id')->references('id')->on('categorias');
+
+            $table->integer('talla_id')->unsigned();
+            $table->foreign('talla_id')->references('id')->on('tallas');
+
+
+            
             $table->string('imagen')->nullable();
             $table->timestamps();
         });

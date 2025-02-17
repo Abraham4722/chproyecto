@@ -12,13 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('envios', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('pedido_id')->constrained('pedidos')->onDelete('cascade');
-            $table->foreignId('direccion_id')->constrained('direcciones')->onDelete('cascade');
+            $table->increments('id');
+            $table->integer('pedido_id')->unsigned();
+            $table->foreign('pedido_id')->references('id')->on('pedidos');
+            $table->integer('direccion_id')->unsigned();
+            $table->foreign('direccion_id')->references('id')->on('direcciones');
             $table->date('fecha_envio')->nullable();
             $table->string('estado')->default('en proceso');
             $table->timestamps();
         });
+        
+        
         
     }
 

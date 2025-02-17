@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('imagenes', function (Blueprint $table) {
             $table->increments('id');
-            $table->foreignId('producto_id')->constrained('productos');
-            $table->string('ruta'); // Ruta de la imagen
-            $table->string('descripcion')->nullable();
+            $table->integer('producto_id')->unsigned();
+            $table->foreign('producto_id')->references('id')->on('productos');
+            $table->string('url');
             $table->timestamps();
         });
+        
         
     }
 

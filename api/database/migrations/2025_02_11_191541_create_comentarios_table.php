@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('comentarios', function (Blueprint $table) {
             $table->increments('id');
-            $table->foreignId('usuario_id');
-            $table->foreignId('producto_id')->constrained('productos');
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
+            $table->integer('producto_id')->unsigned();
+            $table->foreign('producto_id')->references('id')->on('productos');
             $table->text('comentario');
-            $table->dateTime('fecha_comentario');
             $table->timestamps();
         });
+        
         
     }
 

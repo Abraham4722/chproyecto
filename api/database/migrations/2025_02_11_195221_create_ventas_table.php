@@ -12,12 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ventas', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('usuario_id')->constrained('users')->onDelete('cascade');
+            $table->increments('id');
+            $table->integer('usuario_id')->unsigned();
+            $table->foreign('usuario_id')->references('id')->on('users');
             $table->decimal('total', 10, 2);
-            $table->string('estado')->default('pendiente');
+            $table->date('fecha_venta');
             $table->timestamps();
         });
+        
         
     }
 

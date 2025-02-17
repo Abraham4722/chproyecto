@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('modelos', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
             $table->string('nombre');
-            $table->foreignId('marca_id')->constrained('marcas')->onDelete('cascade');
+            $table->integer('marca_id')->unsigned();
+            $table->foreign('marca_id')->references('id')->on('marcas');
             $table->timestamps();
         });
         
