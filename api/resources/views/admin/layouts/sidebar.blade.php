@@ -1,17 +1,17 @@
-<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+<aside class="app-sidebar shadow" data-bs-theme="dark" style="background-color:#010c2a;">
         <!--begin::Sidebar Brand-->
         <div class="sidebar-brand">
           <!--begin::Brand Link-->
           <a href="./index.html" class="brand-link">
             <!--begin::Brand Image-->
             <img
-              src="../../dist/assets/img/AdminLTELogo.png"
+              src="/img/fondo2.jpg"
               alt="AdminLTE Logo"
               class="brand-image opacity-75 shadow"
             />
             <!--end::Brand Image-->
             <!--begin::Brand Text-->
-            <span class="brand-text fw-light">AdminLTE 4</span>
+            <span class="brand-text fw-light">CH-SHIRTS</span>
             <!--end::Brand Text-->
           </a>
           <!--end::Brand Link-->
@@ -29,11 +29,65 @@
             >
               
               <li class="nav-item">
-                <a href="./generate/theme.html" class="nav-link">
-                  <i class="nav-icon bi bi-palette"></i>
-                  <p>Theme Generate</p>
+                <a href="{{url('/admin') }}" class="nav-link">
+                  <i class="nav-icon bi bi-house"></i>
+                  <p>HOME</p>
                 </a>
               </li>
+
+              <li class="nav-item">
+                <a href="{{url('/admin/products') }}" class="nav-link">
+                  <i class="nav-icon bi bi-list-check"></i>
+                  <p>PRODUCTOS</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{url('/admin/pedidos') }}" class="nav-link">
+                  <i class="nav-icon bi bi-bag"></i>
+                  <p>PEDIDOS</p>
+                </a>
+              </li>
+
+
+              <li class="nav-item">
+                <a href="{{url('/admin/categorias') }}" class="nav-link">
+                  <i class="nav-icon bi  bi-tags"></i>
+                  <p>CATEGORIAS</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{url('/admin/marcas') }}" class="nav-link">
+                  <i class="nav-icon bi bi-bookmark-star"></i>
+                  <p>MARCAS</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{url('/admin/envios') }}" class="nav-link">
+                  <i class="nav-icon bi bi-truck"></i>
+                  <p>ENVIOS</p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{url('/admin/pagos') }}" class="nav-link">
+                  <i class="nav-icon bi bi-cash-coin"></i>
+                  <p>PAGOS</p>
+                </a>
+              </li>
+
+              
+              <li class="nav-item">
+                <a href="{{url('/admin/clientes') }}" class="nav-link">
+                  <i class="nav-icon bi  bi-people"></i>
+                  <p>CLIENTES</p>
+                </a>
+              </li>
+
+
+             
 
 
             </ul>
