@@ -2,39 +2,39 @@
 
 namespace App\Models;
 
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 class Producto extends Model
 {
-    use HasFactory;
-
+    protected $table = 'productos';
+    
     protected $fillable = ['nombre', 'descripcion', 'precio', 'categoria_id', 'marca_id'];
 
-    public function categoria()
-    {
+    protected $casts = ['precio' => 'decimal:2'];
+
+    protected $with = ['categoria', 'marca'];
+
+    public function categoria() {
         return $this->belongsTo(Categoria::class);
     }
 
-    public function marca()
-    {
+    public function marca() {
         return $this->belongsTo(Marca::class);
     }
 
-    public function comentarios()
-    {
+    public function comentarios() {
         return $this->hasMany(Comentario::class);
     }
 
-    public function likes()
-    {
+    public function likes() {
         return $this->hasMany(Like::class);
     }
 
-    public function imagenes()
-    {
+    public function imagenes() {
         return $this->hasMany(Imagen::class);
+    }
+
+    public function getPrecioFormateadoAttribute() {
+        return '$' . number_format($this->precio, 2, '.', ',');
     }
 }

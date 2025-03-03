@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductoController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,6 +19,19 @@ Route::get('/admin/marcas',function(){return view('admin.marcas');});
 Route::get('/admin/envios',function(){return view('admin.envios');});
 Route::get('/admin/pagos',function(){return view('admin.pagos');});
 Route::get('/admin/clientes',function(){return view('admin.clientes');});
+
+
+
+
+
+
+
+Route::get('/admin/products', [ProductoController::class, 'index'])->name('admin.products');
+Route::post('/productos', [ProductoController::class, 'store'])->name('productos.store');
+Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+
+
+
 
 
 
