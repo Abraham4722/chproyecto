@@ -4,7 +4,12 @@
 namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\User;
+use App\Models\Talla;
+use App\Models\Categoria;
+use App\Models\Marca;
+use App\Models\Pedido;
 use Illuminate\Http\Request;
+
 //use App\Http\Controllers\Controller;
 class ProductoController extends Controller
 {
@@ -14,12 +19,16 @@ class ProductoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-       
-        $productos = Producto::all();
-        return response()->json($productos);
-    }
+  public function index()
+{
+
+    $productos = Producto::all();
+    $tallas = Talla::all();
+    $categorias = Categoria::all();
+    $marcas = Marca::all();
+    return view('admin.products', compact('productos', 'tallas', 'categorias', 'marcas'));
+}
+
     
     
     
@@ -38,33 +47,46 @@ class ProductoController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-        'descripcion' => 'required|string',
-        'precio' => 'required|numeric',
-        'stock' => 'required|integer',
-        'categoria' => 'required|string',
-        'talla' => 'required|string',
-        'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048'
-    ]);
+    {
+      
+        
+            
 
-    // Guardar imagen en "public/images"
-    $imagenPath = $request->file('imagen')->store('images', 'public');
+        $request->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'required|string',
+            'precio' => 'required|numeric',
+            'stock' => 'required|integer',
+            'categoria_id' => 'required|exists:categorias,id', // ✅ CAMBIO AQUÍ
+            'talla_id' => 'required|integer',
+            'marca_id' => 'required|exists:marcas,id',
+            'imagen' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+        ]);
+    
+        // Guardar imagen en "public/images"
+$imagen = $request->file('imagen');
+$nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
+$imagen->move(public_path('productos'), $nombreImagen);
 
-    // Crear nuevo producto
-    Producto::create([
-        'nombre' => $request->nombre,
-        'descripcion' => $request->descripcion,
-        'precio' => $request->precio,
-        'stock' => $request->stock,
-        'categoria' => $request->categoria,
-        'talla' => $request->talla,
-        'imagen' => $imagenPath
-    ]);
+// Ruta donde se guardó la imagen
+$imagenPath = $nombreImagen;
 
-    return redirect()->route('productos.index')->with('success', 'Producto agregado correctamente');
-}
+    
+        // Crear nuevo producto
+        Producto::create([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'precio' => $request->precio,
+            'stock' => $request->stock,
+            'categoria_id' => $request->categoria_id, // ✅ CAMBIO AQUÍ
+            'talla_id' => $request->talla_id,
+            'marca_id' => $request->marca_id,
+            'imagen' => $imagenPath
+        ]);
+    
+        return redirect('/admin/products')->with('success', 'Producto agregado correctamente');
+    }
+    
 
 
     /**
@@ -72,24 +94,62 @@ class ProductoController extends Controller
      */
     public function show(Producto $producto)
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Producto $producto)
-    {
-        //
+    public function update(Request $request, Producto $producto)
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'descripcion' => 'required|string',
+        'precio' => 'required|numeric',
+        'stock' => 'required|integer',
+        'categoria_id' => 'required|exists:categorias,id',
+        'talla_id' => 'required|integer',
+        'marca_id' => 'required|exists:marcas,id',
+        'imagen' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
+    ]);
+
+    // Si hay una nueva imagen, actualizarla
+    if ($request->hasFile('imagen')) {
+        $imagen = $request->file('imagen');
+        $nombreImagen = time() . '.' . $imagen->getClientOriginalExtension();
+        $imagen->move(public_path('productos'), $nombreImagen);
+        $producto->imagen = $nombreImagen;
     }
+
+    // Actualizar datos del producto
+    $producto->update([
+        'nombre' => $request->nombre,
+        'descripcion' => $request->descripcion,
+        'precio' => $request->precio,
+        'stock' => $request->stock,
+        'categoria_id' => $request->categoria_id,
+        'talla_id' => $request->talla_id,
+        'marca_id' => $request->marca_id,
+        'imagen' => $producto->imagen // Mantiene la imagen actual si no se sube una nueva
+    ]);
+
+    return redirect('/admin/products')->with('success', 'Producto actualizado correctamente');
+}
+public function edit($id)
+{
+    $producto = Producto::find($id);
+    $categorias = Categoria::all();
+    $tallas = Talla::all();
+    $marcas = Marca::all();
+    $imagen = $producto->imagen; // Agregar la imagen a la vista
+    
+    return view('productos.edit', compact('producto', 'categorias', 'tallas', 'marcas', 'imagen'));
+}
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Producto $producto)
-    {
-        //
-    }
+  
 
     /**
      * Remove the specified resource from storage.
@@ -98,8 +158,9 @@ class ProductoController extends Controller
     {
         $producto = Producto::findOrFail($id);
         $producto->delete();
+        
 
-        return redirect()->route('productos.index')->with('success', 'Producto eliminado correctamente');
+        return redirect('/admin/products')->with('success', 'Producto ELIMINADO correctamente');
     }
 }
 

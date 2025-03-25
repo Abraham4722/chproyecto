@@ -57,19 +57,13 @@
                 </a>
               </li>
 
-              <li class="nav-item">
-                <a href="{{url('/admin/marcas') }}" class="nav-link">
-                  <i class="nav-icon bi bi-bookmark-star"></i>
-                  <p>MARCAS</p>
-                </a>
-              </li>
 
-              <li class="nav-item">
+              <!--<li class="nav-item">
                 <a href="{{url('/admin/envios') }}" class="nav-link">
                   <i class="nav-icon bi bi-truck"></i>
                   <p>ENVIOS</p>
                 </a>
-              </li>
+              </li> 
 
               <li class="nav-item">
                 <a href="{{url('/admin/pagos') }}" class="nav-link">
@@ -77,6 +71,7 @@
                   <p>PAGOS</p>
                 </a>
               </li>
+              -->
 
               
               <li class="nav-item">

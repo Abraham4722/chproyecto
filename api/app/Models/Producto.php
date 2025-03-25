@@ -8,14 +8,17 @@ class Producto extends Model
 {
     protected $table = 'productos';
     
-    protected $fillable = ['nombre', 'descripcion', 'precio', 'categoria_id', 'marca_id'];
+    protected $fillable = ['nombre','stock','descripcion','imagen', 'precio', 'categoria_id', 'marca_id','talla_id'];
 
     protected $casts = ['precio' => 'decimal:2'];
 
-    protected $with = ['categoria', 'marca'];
+    protected $with = ['categoria', 'marca','talla'];
 
     public function categoria() {
         return $this->belongsTo(Categoria::class);
+    }
+    public function talla() {
+        return $this->belongsTo(Talla::class);
     }
 
     public function marca() {

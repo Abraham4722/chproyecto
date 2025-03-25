@@ -32,131 +32,46 @@
 
     <!-- Contenido de las pestañas -->
     <div class="tab-content" id="pills-tabContent">
-        <!-- Categorías -->
-        <div class="tab-pane fade show active" id="pills-categorias" role="tabpanel" aria-labelledby="pills-categorias-tab">
-            <h3>CATEGORIAS</h3>
+        @foreach (['categorias', 'marcas', 'modelos', 'tallas', 'colores'] as $seccion)
+        <div class="tab-pane fade {{ $loop->first ? 'show active' : '' }}" id="pills-{{ $seccion }}" role="tabpanel" aria-labelledby="pills-{{ $seccion }}-tab">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="mb-0 text-uppercase">{{ $seccion }}</h3>
+                <a href="#" class="btn btn-success">
+                    <i class="bi bi-plus-circle"></i> Agregar
+                </a>
+            </div>
+            
             <table class="table table-hover">
                 <thead class="table-light">
                     <tr>
                         <th>#ID</th>
                         <th>NOMBRE</th>
-                        <th>DESCRIPCION</th>
-                        <th></th>
+                        @if($seccion == 'categorias') <th>DESCRIPCIÓN</th> @endif
+                        @if($seccion == 'modelos') <th>MARCA</th> @endif
+                        @if($seccion == 'colores') <th># COLOR</th> @endif
+                        <th class="text-end">Acciones</th> <!-- Alineación a la derecha -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>
-                            <button class="btn btn-primary">Editar</button>
-                            <button class="btn btn-danger">Eliminar</button>
+                        <td>Ejemplo</td>
+                        @if($seccion == 'categorias') <td>Descripción de prueba</td> @endif
+                        @if($seccion == 'modelos') <td>Marca ejemplo</td> @endif
+                        @if($seccion == 'colores') <td>#FF0000</td> @endif
+                        <td class="text-end">
+                            <button class="btn btn-primary btn-sm">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
-        <!-- Marcas -->
-        <div class="tab-pane fade" id="pills-marcas" role="tabpanel" aria-labelledby="pills-marcas-tab">
-            <h3>MARCAS</h3>
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#ID</th>
-                        <th>NOMBRE</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>
-                            <button class="btn btn-primary">Editar</button>
-                            <button class="btn btn-danger">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Modelos -->
-        <div class="tab-pane fade" id="pills-modelos" role="tabpanel" aria-labelledby="pills-modelos-tab">
-            <h3>MODELOS</h3>
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#ID</th>
-                        <th>NOMBRE</th>
-                        <th>MARCAS</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>
-                            <button class="btn btn-primary">Editar</button>
-                            <button class="btn btn-danger">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Tallas -->
-        <div class="tab-pane fade" id="pills-tallas" role="tabpanel" aria-labelledby="pills-tallas-tab">
-            <h3>TALLAS</h3>
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#ID</th>
-                        <th>NOMBRE</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>
-                            <button class="btn btn-primary">Editar</button>
-                            <button class="btn btn-danger">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Colores -->
-        <div class="tab-pane fade" id="pills-colores" role="tabpanel" aria-labelledby="pills-colores-tab">
-            <h3>COLORES</h3>
-            <table class="table table-hover">
-                <thead class="table-light">
-                    <tr>
-                        <th>#ID</th>
-                        <th>NOMBRE</th>
-                        <th># COLOR</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>
-                            <button class="btn btn-primary">Editar</button>
-                            <button class="btn btn-danger">Eliminar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        @endforeach
     </div>
 </div>
 @endsection

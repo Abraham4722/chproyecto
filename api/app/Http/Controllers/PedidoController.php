@@ -34,9 +34,25 @@ class PedidoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pedido $pedido)
+    public function show($id)
     {
-        //
+//selecionar los datos del pedido
+
+        $pedido = Pedido::with('detalles.producto')->find($id); 
+        $envio = null;
+        $pago = null;
+        if($pedido->detalles->first()){
+            $envio = $pedido->detalles->first()->envio;
+            $pago = $pedido->detalles->first()->pago;
+        }
+   
+    
+        $productos = $pedido->productos;
+        $detalles = $pedido->detalles;
+
+        return view('admin.detalles', compact('pedido', 'envio', 'pago', 'productos', 'detalles'));
+
+
     }
 
     /**
