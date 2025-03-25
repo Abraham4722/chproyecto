@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
 use Illuminate\Http\Request;
+use App\Models\Categoria;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Talla;
+use App\Models\Color;
 
 class CategoriaController extends Controller
 {
@@ -12,7 +16,15 @@ class CategoriaController extends Controller
      */
     public function index()
     {
-        //
+        $items = [
+            'categorias' => Categoria::all(),
+            'marcas' => Marca::all(),
+            'modelos' => Modelo::with('marca')->get(),
+            'tallas' => Talla::all(),
+            'colores' => Color::all(),
+        ];
+    
+        return view('admin.categorias', compact('items'));
     }
 
     /**
@@ -27,9 +39,19 @@ class CategoriaController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'descripcion' => 'nullable|string',
+    ]);
+
+    Categoria::create([
+        'nombre' => $request->nombre,
+        'descripcion' => $request->descripcion,
+    ]);
+
+    return response()->json(['success' => 'Categoría agregada correctamente']);
+}
 
     /**
      * Display the specified resource.
@@ -43,9 +65,10 @@ class CategoriaController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Categoria $categoria)
-    {
-        //
-    }
+{
+    return view('admin.categorias.edit', compact('categoria'));
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -60,6 +83,13 @@ class CategoriaController extends Controller
      */
     public function destroy(Categoria $categoria)
     {
-        //
+        if ($categoria->productos()->count() > 0) {
+            return redirect()->route('categorias.index')->with('error', 'No puedes eliminar esta categoría porque tiene productos asociados.');
+        }
+    
+        $categoria->delete();
+        return redirect()->route('categorias.index')->with('success', 'Categoría eliminada correctamente.');
     }
+    
+
 }
