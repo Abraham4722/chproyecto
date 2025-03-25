@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\CategoriaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductoController;
@@ -11,52 +10,40 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/send-email',[UserController::class,'sendEmail']);
-Route::get('/admin',function(){return view('admin.index');});
-//Route::get('/admin/products',function(){return view('admin.products');});
-Route::get('/admin/pedidos',function(){return view('admin.pedidos');});
-Route::get('/admin/ventas',function(){return view('admin.ventas');});
-Route::get('/admin/categorias',[CategoriaController::class,'index']);
-Route::get('/admin/marcas',function(){return view('admin.marcas');});
-Route::get('/admin/envios',function(){return view('admin.envios');});
-Route::get('/admin/pagos',function(){return view('admin.pagos');});
-Route::get('/admin/clientes',function(){return view('admin.clientes');});
-Route::get('/admin/detalles/{id}', [PedidoController::class, 'show'])->name('admin.detalles');
-
-
-
-
-Route::get('/productos/{id}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
-Route::put('/productos/{id}', [ProductoController::class, 'update'])->name('productos.update');
-
-
-
-Route::get('/admin/categorias', [CategoriaController::class, 'index'])->name('admin.categorias');
-Route::post('/admin/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
-Route::get('/admin/categorias/{categoria}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
-Route::put('/admin/categorias/{categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
-Route::delete('/admin/categorias/{categoria}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
-
-
-
-
-
-Route::get('/admin/products', [ProductoController::class, 'index'])->name('admin.products');
-Route::post('/productoss', [ProductoController::class, 'store'])->name('productos.store');
-Route::delete('/productos/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
-
-
-
-
-
-
-
-
-Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/admin',function(){
-    return view('admin.index');
+// Rutas de administración
+Route::prefix('admin')->group(function () {
+    Route::get('/', function () {
+        return view('admin.index');
+    });
+    
+    Route::get('/send-email', [UserController::class, 'sendEmail']);
+    
+    // Productos
+    Route::get('/products', [ProductoController::class, 'index'])->name('admin.products');
+    Route::post('/products', [ProductoController::class, 'store'])->name('productos.store');
+    Route::get('/products/{id}/edit', [ProductoController::class, 'edit'])->name('productos.edit');
+    Route::put('/products/{id}', [ProductoController::class, 'update'])->name('productos.update');
+    Route::delete('/products/{id}', [ProductoController::class, 'destroy'])->name('productos.destroy');
+    
+    // Pedidos
+    Route::get('/pedidos', function () {
+        return view('admin.pedidos');
+    });
+    Route::get('/detalles/{id}', [PedidoController::class, 'show'])->name('admin.detalles');
+    
+    // Categorías
+    Route::get('/categorias', [CategoriaController::class, 'index'])->name('admin.categorias');
+    Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
+    Route::get('/categorias/{categoria}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
+    Route::put('/categorias/{categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
+    Route::delete('/categorias/{categoria}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
+    
+    // Otras rutas administrativas
+    Route::view('/ventas', 'admin.ventas');
+    Route::view('/marcas', 'admin.marcas');
+    Route::view('/envios', 'admin.envios');
+    Route::view('/pagos', 'admin.pagos');
+    Route::view('/clientes', 'admin.clientes');
 });
 
 Auth::routes();
