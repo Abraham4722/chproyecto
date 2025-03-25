@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Modelo;
+use App\Models\Marca;
 
-class ModeloController extends Controller
+class MarcaController extends Controller
 {
     public function store(Request $request)
 {
@@ -13,11 +13,11 @@ class ModeloController extends Controller
         'nombre' => 'required|string|max:255',
     ]);
 
-    Modelo::create([
+    Marca::create([
         'nombre' => $request->nombre,
     ]);
 
-    return response()->json(['success' => 'Modelo agregado correctamente']);
+    return response()->json(['success' => 'Marca agregada correctamente']);
 }
 
 }

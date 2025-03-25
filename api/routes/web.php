@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductoController;
@@ -15,7 +16,7 @@ Route::get('/admin',function(){return view('admin.index');});
 //Route::get('/admin/products',function(){return view('admin.products');});
 Route::get('/admin/pedidos',function(){return view('admin.pedidos');});
 Route::get('/admin/ventas',function(){return view('admin.ventas');});
-Route::get('/admin/categorias',function(){return view('admin.categorias');});
+Route::get('/admin/categorias',[CategoriaController::class,'index']);
 Route::get('/admin/marcas',function(){return view('admin.marcas');});
 Route::get('/admin/envios',function(){return view('admin.envios');});
 Route::get('/admin/pagos',function(){return view('admin.pagos');});

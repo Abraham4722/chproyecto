@@ -1,33 +1,44 @@
+{{-- Agregado: Mensajes de éxito o error --}}
+@if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
+
+{{-- Aquí continúa tu código original --}}
+
 @extends('admin.layouts.main')
 
 @section('contenido')
 <div class="app-content-header">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-6"><h3 class="mb-0"></h3></div>
-            <div class="col-sm-6"></div>
+            <div class="col-sm-6"><h3 class="mb-0">Administración</h3></div>
         </div>
     </div>
 </div>
 
 <div class="app-content">
     <!-- Navegación de pestañas -->
-    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="pills-categorias-tab" data-bs-toggle="pill" data-bs-target="#pills-categorias" type="button" role="tab" aria-controls="pills-categorias" aria-selected="true">CATEGORIAS</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-marcas-tab" data-bs-toggle="pill" data-bs-target="#pills-marcas" type="button" role="tab" aria-controls="pills-marcas" aria-selected="false">MARCAS</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-modelos-tab" data-bs-toggle="pill" data-bs-target="#pills-modelos" type="button" role="tab" aria-controls="pills-modelos" aria-selected="false">MODELOS</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-tallas-tab" data-bs-toggle="pill" data-bs-target="#pills-tallas" type="button" role="tab" aria-controls="pills-tallas" aria-selected="false">TALLAS</button>
-        </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="pills-colores-tab" data-bs-toggle="pill" data-bs-target="#pills-colores" type="button" role="tab" aria-controls="pills-colores" aria-selected="false">COLORES</button>
-        </li>
+    <ul class="nav nav-pills mb-3 bg-light p-2 rounded shadow-sm" id="pills-tab" role="tablist">
+        @php
+            $tabs = ['categorias' => 'CATEGORÍAS', 'marcas' => 'MARCAS', 'modelos' => 'MODELOS', 'tallas' => 'TALLAS', 'colores' => 'COLORES'];
+        @endphp
+        @foreach($tabs as $id => $label)
+            <li class="nav-item" role="presentation">
+                <button class="nav-link {{ $loop->first ? 'active' : '' }}" id="pills-{{ $id }}-tab" 
+                        data-bs-toggle="pill" data-bs-target="#pills-{{ $id }}" type="button" role="tab" 
+                        aria-controls="pills-{{ $id }}" aria-selected="{{ $loop->first ? 'true' : 'false' }}">
+                    {{ $label }}
+                </button>
+            </li>
+        @endforeach
     </ul>
 
     <!-- Contenido de las pestañas -->
@@ -74,4 +85,56 @@
         @endforeach
     </div>
 </div>
+@endsection
+@section('script') 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.saveData').forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            let form = this.closest('form');
+            let formData = new FormData(form);
+            let url = form.action;
+
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: data.success,
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        location.reload(); // Recarga la página para ver el nuevo registro
+                    });
+                } else {
+                    throw data.errors;
+                }
+            })
+            .catch(errors => {
+                let errorMessage = "Error al agregar, verifica los datos.";
+                if (errors) {
+                    errorMessage = Object.values(errors).flat().join("\n");
+                }
+
+                Swal.fire({
+                    title: 'Error',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        });
+    });
+});
+</script>
+
 @endsection

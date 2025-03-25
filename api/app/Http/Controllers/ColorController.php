@@ -27,9 +27,19 @@ class ColorController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+        'codigo' => 'required|string|max:7', // Código de color en formato HEX (#000000)
+    ]);
+
+    Color::create([
+        'nombre' => $request->nombre,
+        'codigo' => $request->codigo,
+    ]);
+
+    return response()->json(['success' => 'Color agregado correctamente']);
+}
 
     /**
      * Display the specified resource.

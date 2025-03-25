@@ -27,9 +27,17 @@ class TallaController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
+{
+    $request->validate([
+        'nombre' => 'required|string|max:255',
+    ]);
+
+    Talla::create([
+        'nombre' => $request->nombre,
+    ]);
+
+    return response()->json(['success' => 'Talla agregada correctamente']);
+}
 
     /**
      * Display the specified resource.

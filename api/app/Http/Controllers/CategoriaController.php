@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Categoria;
 use Illuminate\Http\Request;
+use App\Models\Categoria;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Talla;
+use App\Models\Color;
 
 class CategoriaController extends Controller
 {
@@ -39,4 +43,6 @@ class CategoriaController extends Controller
         $categoria->delete();
         return redirect()->route('categorias.index')->with('success', 'Categoría eliminada');
     }
+    
+
 }
