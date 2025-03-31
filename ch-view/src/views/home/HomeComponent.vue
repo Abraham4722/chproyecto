@@ -81,7 +81,7 @@
             <div class="product-badge" v-if="product.discount">-{{ product.discount }}%</div>
             <div class="product-thumb">
               <a href="#">
-                <img :src="product.image" class="img-fluid" :alt="product.name">
+                <img :src="product.imagen" class="img-fluid" :alt="product.nombre">
               </a>
             </div>
             <div class="product-details">
@@ -282,7 +282,8 @@ export default {
       ],    
       ultimos:[],
       categorias:[], 
-      loaded:false
+      loaded:false,
+      url:'http://localhost:8000/'
 
     }
   },
