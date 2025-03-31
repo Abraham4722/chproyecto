@@ -3,7 +3,14 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
+use App\Models\Producto;
+use App\Models\Color;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Talla;
+
 
 class IndexController extends Controller
 {
@@ -12,12 +19,12 @@ class IndexController extends Controller
      */
     public function index()
     {
-        $ultimos = Product::get()->orderBy('created_at','DESC')->take(10);
-        $categorias = Category::all();
-        $modelos = models::all();
-        $tallas = Tallas::all();
-        $colores = Colores::all();
-        $marcas = Marcas::all();
+        $ultimos = Producto::get()->take(10);
+        $categorias = Categoria::all();
+        $modelos = Modelo::all();
+        $tallas = Talla::all();
+        $colores = Color::all();
+        $marcas = Marca::all();
 
 
         return response()->json([

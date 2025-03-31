@@ -81,7 +81,7 @@
             <div class="product-badge" v-if="product.discount">-{{ product.discount }}%</div>
             <div class="product-thumb">
               <a href="#">
-                <img :src="product.imagen" class="img-fluid" :alt="product.nombre">
+                <img :src="url+'productos/' + product.imagen" class="img-fluid" :alt="product.nombre">
               </a>
             </div>
             <div class="product-details">
@@ -296,6 +296,7 @@ export default {
         axios.get('index').then((Response)=>{
           console.log("RESPUESTA DESDE EL BAKEND", Response.data)
 
+          this.featuredProducts=Response.data.ultimos
 
         }).catch((error)=>{
           console.log("ERROR",error)
