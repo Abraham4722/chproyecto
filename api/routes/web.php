@@ -32,12 +32,13 @@ Route::prefix('admin')->group(function () {
     Route::get('/detalles/{id}', [PedidoController::class, 'show'])->name('admin.detalles');
     
     // Categorías
-    Route::get('/categorias', [CategoriaController::class, 'index'])->name('admin.categorias');
-    Route::post('/categorias', [CategoriaController::class, 'store'])->name('categorias.store');
-    Route::get('/categorias/{categoria}/edit', [CategoriaController::class, 'edit'])->name('categorias.edit');
-    Route::put('/categorias/{categoria}', [CategoriaController::class, 'update'])->name('categorias.update');
-    Route::delete('/categorias/{categoria}', [CategoriaController::class, 'destroy'])->name('categorias.destroy');
-    
+    // Categorías
+Route::get('/categorias', [CategoriaController::class, 'index'])->name('admin.categorias');
+Route::post('/categorias', [CategoriaController::class, 'store'])->name('admin.categorias.store');
+Route::get('/categorias/{categoria}/edit', [CategoriaController::class, 'edit'])->name('admin.categorias.edit');
+Route::put('/categorias/{categoria}', [CategoriaController::class, 'update'])->name('admin.categorias.update');
+Route::delete('/categorias/{categoria}', [CategoriaController::class, 'destroy'])->name('admin.categorias.destroy');
+
     // Otras rutas administrativas
     Route::view('/ventas', 'admin.ventas');
     Route::view('/marcas', 'admin.marcas');

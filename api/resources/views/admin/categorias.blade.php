@@ -58,19 +58,22 @@
                             <img src="{{ asset('storage/'.$categoria->imagen) }}" width="50" class="img-thumbnail">
                             @endif
                         </td>
-                        <td class="text-end">
-                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalCategoria" 
+                       <td class="text-end">
+                            <!-- Botón Editar -->
+                            <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarCategoria" 
                                 onclick="editarCategoria({{ json_encode($categoria) }})">
                                 <i class="bi bi-pencil"></i>
                             </button>
-                            <form action="{{ route('categorias.destroy', $categoria->id) }}" method="POST" style="display:inline;">
+
+                            <!-- Formulario de Eliminación -->
+                            <form action="{{ route('admin.categorias.destroy', $categoria->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta categoría?')">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </form>
-                        </td>
+                       </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -114,58 +117,71 @@
     </div>
 </div>
 
+<!-- Modal para Editar Categoría -->
+<div class="modal fade" id="modalEditarCategoria" tabindex="-1" aria-labelledby="modalEditarCategoriaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarCategoriaLabel">Editar Categoría</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formEditarCategoria" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="editar_categoria_id" name="id">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="editar_nombre" class="form-label">Nombre *</label>
+                        <input type="text" class="form-control" id="editar_nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editar_descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="editar_descripcion" name="descripcion" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editar_imagen" class="form-label">Imagen</label>
+                        <input type="file" class="form-control" id="editar_imagen" name="imagen">
+                        <div id="editarImagenPreview" class="mt-2"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
-@push('scripts')
+@section('script')
 <script>
     // Función para editar categoría (versión corregida)
     function editarCategoria(categoria) {
-        const form = document.getElementById('formCategoria');
-        const modalTitle = document.getElementById('modalCategoriaLabel');
-        const imagenPreview = document.getElementById('imagenPreview');
-        const eliminarContainer = document.getElementById('eliminarImagenContainer');
-        
-        // Configurar formulario para edición
-        form.action = "{{ route('categorias.update', '') }}/" + categoria.id;
-        modalTitle.textContent = 'Editar Categoría';
-        
-        // Asegurar que solo haya un campo _method
-        let methodInput = form.querySelector('input[name="_method"]');
-        if (!methodInput) {
-            methodInput = document.createElement('input');
-            methodInput.type = 'hidden';
-            methodInput.name = '_method';
-            form.appendChild(methodInput);
-        }
-        methodInput.value = 'PUT';
+        const form = document.getElementById('formEditarCategoria');
+        const modalTitle = document.getElementById('modalEditarCategoriaLabel');
+        const imagenPreview = document.getElementById('editarImagenPreview');
 
-        // Rellenar campos con datos de la categoría
-        document.getElementById('categoria_id').value = categoria.id;
-        document.getElementById('nombre').value = categoria.nombre || '';
-        document.getElementById('descripcion').value = categoria.descripcion || '';
+        form.action = `/admin/categorias/${categoria.id}`;
+        document.getElementById('editar_categoria_id').value = categoria.id;
+        document.getElementById('editar_nombre').value = categoria.nombre || '';
+        document.getElementById('editar_descripcion').value = categoria.descripcion || '';
 
-        // Mostrar imagen actual si existe
-        imagenPreview.innerHTML = '';
-        if (categoria.imagen) {
-            imagenPreview.innerHTML = `
-                <img src="/storage/${categoria.imagen}" width="100" class="img-thumbnail">
-                <p class="text-muted small mt-2">Imagen actual</p>
-            `;
-            eliminarContainer.style.display = 'block';
-        } else {
-            eliminarContainer.style.display = 'none';
-        }
+        // Mostrar la imagen actual si existe
+        imagenPreview.innerHTML = categoria.imagen 
+            ? `<img src="/storage/${categoria.imagen}" width="100" class="img-thumbnail">`
+            : '';
     }
 
-    // Configuración inicial del modal
+    // Configuración inicial del modal para agregar categoría
     document.getElementById('modalCategoria').addEventListener('show.bs.modal', function (event) {
         const form = document.getElementById('formCategoria');
         form.reset();
-        form.action = "{{ route('categorias.store') }}";
+        form.action = "{{ route('admin.categorias.store') }}";
         document.querySelector('input[name="_method"]')?.remove();
         document.getElementById('modalCategoriaLabel').textContent = 'Agregar Categoría';
         document.getElementById('imagenPreview').innerHTML = '';
-        document.getElementById('eliminarImagenContainer').style.display = 'none';
     });
 </script>
-@endpush
+@endsection
