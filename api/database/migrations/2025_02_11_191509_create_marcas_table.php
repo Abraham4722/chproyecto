@@ -16,8 +16,6 @@ return new class extends Migration
             $table->string('nombre')->unique();
             $table->timestamps();
         });
-        
-        
     }
 
     /**
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('marca');
+        Schema::dropIfExists('marcas'); // Cambiado a plural para coincidir con el nombre de la tabla
     }
 };

@@ -9,7 +9,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('categorias', function (Blueprint $table) {
-            $table->id();
+            $table->increments("id");
             $table->string('nombre')->unique();
             $table->text('descripcion')->nullable();
             $table->string('imagen')->nullable();

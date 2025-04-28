@@ -6,6 +6,11 @@ use App\Models\Categoria;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Talla;
+use App\Models\Color;
+
 
 class CategoriaController extends Controller
 {
@@ -30,7 +35,11 @@ class CategoriaController extends Controller
     public function index()
     {
         $categorias = Categoria::latest()->paginate(10);
-        return view('admin.categorias', compact('categorias')); // Ajustado a tu estructura de vistas
+        $marcas = Marca::all();
+        $modelos = Modelo::all();
+        $tallas = Talla::all();
+        $colores = Color::all();
+        return view('admin.categorias', compact('colores','tallas','modelos','marcas','categorias')); // Ajustado a tu estructura de vistas
     }
 
     public function store(Request $request)

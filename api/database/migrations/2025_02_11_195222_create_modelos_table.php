@@ -15,7 +15,9 @@ return new class extends Migration
             $table->increments('id');
             $table->string('nombre');
             $table->integer('marca_id')->unsigned();
-            $table->foreign('marca_id')->references('id')->on('marcas');
+            $table->foreign('marca_id')
+                ->references('id')->on('marcas')
+                ->onDelete('cascade'); // Elimina los modelos si se elimina la marca
             $table->timestamps();
         });
         

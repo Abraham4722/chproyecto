@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Talla;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Talla;
+use App\Models\Color;
+
 
 class TallaController extends Controller
 {
@@ -12,44 +19,45 @@ class TallaController extends Controller
      */
     public function index()
     {
-        //
+        $categorias = Categoria::latest()->paginate(10);
+        $marcas = Marca::all();
+        $modelos = Modelo::all();
+        $tallas = Talla::all();
+        $colores = Color::all();
+        return view('admin.categorias', compact('colores','tallas','modelos','marcas','categorias')); // Ajustado a tu estructura de vistas
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
-    }
+  
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-    ]);
-
-    Talla::create([
-        'nombre' => $request->nombre,
-    ]);
-
-    return response()->json(['success' => 'Talla agregada correctamente']);
-}
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Talla $talla)
     {
-        //
+        // Validación de datos
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:100|unique:tallas',
+            
+            ]);
+
+        try {
+            // Intentar crear la talla
+            $talla = Talla::create($validated);
+
+          
+
+            return redirect()->route('admin.tallas')
+                ->with('success', 'talla creada exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al crear la talla: ' . $e->getMessage());
+            return back()->with('error', 'Hubo un error al crear la talla.');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+  
     public function edit(Talla $talla)
     {
         //
@@ -60,14 +68,36 @@ class TallaController extends Controller
      */
     public function update(Request $request, Talla $talla)
     {
-        //
+        // Validación de datos para actualizar la talla
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:100|unique:tallas,nombre,' . $talla->id,
+        ]);
+
+        try {
+            // Actualizar la talla
+            $talla->update($validated);
+
+            return redirect()->route('admin.tallas')
+                ->with('success', 'Talla actualizada exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar la talla: ' . $e->getMessage());
+            return back()->with('error', 'Hubo un error al actualizar la talla.');
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+  
     public function destroy(Talla $talla)
     {
-        //
+        try {
+            
+            $talla->delete();
+
+            return redirect()->route('admin.tallas')
+                ->with('success', 'Talla eliminada exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar la talla: ' . $e->getMessage());
+            return back()->with('error', 'Hubo un error al eliminar la Talla.');
+        }
     }
 }
+

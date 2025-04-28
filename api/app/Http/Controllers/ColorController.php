@@ -2,8 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Color;
+use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Talla;
+use App\Models\Color;
+
 
 class ColorController extends Controller
 {
@@ -12,7 +19,12 @@ class ColorController extends Controller
      */
     public function index()
     {
-        //
+        $categorias = Categoria::latest()->paginate(10);
+        $marcas = Marca::all();
+        $modelos = Modelo::all();
+        $tallas = Talla::all();
+        $colores = Color::all();
+        return view('admin.categorias', compact('colores','tallas','modelos','marcas','categorias')); // Ajustado a tu estructura de vistas
     }
 
     /**
@@ -27,19 +39,29 @@ class ColorController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $request->validate([
-        'nombre' => 'required|string|max:255',
-        'codigo' => 'required|string|max:7', // Código de color en formato HEX (#000000)
-    ]);
-
-    Color::create([
-        'nombre' => $request->nombre,
-        'codigo' => $request->codigo,
-    ]);
-
-    return response()->json(['success' => 'Color agregado correctamente']);
-}
+    {
+        // Validación de datos
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:100|unique:colores',
+            'codigo_hex' => 'required|string|max:7|unique:colores',
+        ]);
+    
+        try {
+            // Crear el color
+            $color = Color::create($validated);
+    
+            // Redirigir con mensaje de éxito
+            return redirect()->route('admin.colores')
+                ->with('success', 'Color creado exitosamente');
+        } catch (\Exception $e) {
+            // Registrar el error en logs
+            \Log::error('Error al crear el color: ' . $e->getMessage());
+    
+            // Redirigir con mensaje de error
+            return back()->with('error', 'Hubo un error al crear el color.');
+        }
+    }
+    
 
     /**
      * Display the specified resource.
@@ -54,7 +76,7 @@ class ColorController extends Controller
      */
     public function edit(Color $color)
     {
-        //
+        
     }
 
     /**
@@ -62,7 +84,22 @@ class ColorController extends Controller
      */
     public function update(Request $request, Color $color)
     {
-        //
+        // Validación de datos para actualizar el color
+        $validated = $request->validate([
+            'nombre' => 'required|string|max:100|unique:colores,nombre,' . $color->id,
+            'codigo_hex' => 'required|string|max:7|unique:colores,codigo_hex,' . $color->id,
+        ]);
+
+        try {
+            // Actualizar el color
+            $color->update($validated);
+
+            return redirect()->route('admin.colores')
+                ->with('success', 'Color actualizado exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar el color: ' . $e->getMessage());
+            return back()->with('error', 'Hubo un error al actualizar el color.');
+        }
     }
 
     /**
@@ -70,6 +107,16 @@ class ColorController extends Controller
      */
     public function destroy(Color $color)
     {
-        //
+        //crear el destroy
+        try {
+            // Intentar eliminar el color
+            $color->delete();
+
+            return redirect()->route('admin.colores')
+                ->with('success', 'Color eliminado exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar el color: ' . $e->getMessage());
+            return back()->with('error', 'Hubo un error al eliminar el color.');
+        }
     }
 }

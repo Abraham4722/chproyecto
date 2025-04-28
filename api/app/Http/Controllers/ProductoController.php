@@ -8,6 +8,9 @@ use App\Models\Talla;
 use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Pedido;
+use App\Models\Color;
+use App\Models\TallaProducto;   
+use App\Models\Modelo;
 use Illuminate\Http\Request;
 
 //use App\Http\Controllers\Controller;
@@ -26,7 +29,9 @@ class ProductoController extends Controller
     $tallas = Talla::all();
     $categorias = Categoria::all();
     $marcas = Marca::all();
-    return view('admin.products', compact('productos', 'tallas', 'categorias', 'marcas'));
+    $modelos = Modelo::all();
+
+    return view('admin.products', compact('productos', 'tallas', 'categorias', 'marcas','modelos'));
 }
 
     
@@ -130,7 +135,7 @@ $imagenPath = $nombreImagen;
         'categoria_id' => $request->categoria_id,
         'talla_id' => $request->talla_id,
         'marca_id' => $request->marca_id,
-        'imagen' => $producto->imagen // Mantiene la imagen actual si no se sube una nueva
+        'imagen' => $request->hasFile('imagen') ? $nombreImagen : $producto->imagen
     ]);
 
     return redirect('/admin/products')->with('success', 'Producto actualizado correctamente');

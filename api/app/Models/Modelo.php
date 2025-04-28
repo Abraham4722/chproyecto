@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Modelo extends Model
 {
@@ -12,8 +13,11 @@ class Modelo extends Model
     protected $table = 'modelos';
     protected $fillable = ['nombre', 'marca_id'];
 
-    public function marca()
+    /**
+     * Relación con la tabla marcas.
+     */
+    public function marca(): BelongsTo
     {
-        return $this->belongsTo(Marca::class);
+        return $this->belongsTo(Marca::class, 'marca_id')->withDefault();
     }
 }

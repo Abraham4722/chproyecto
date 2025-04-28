@@ -45,7 +45,7 @@
             <img src="@/plantilla/images/palmR.jpg" alt="Mujeres" class="img-fluid">
             <div class="category-overlay">
               <h3 style="color: aliceblue;">BOOS</h3>
-              <a href="#" class="btn btn-outline-light">Ver colección</a>
+              <router-link to="/coleccion/show" class="btn btn-outline-light">Ver colección</router-link>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@
             <img src="@/plantilla/images/palmR.jpg" alt="Hombres" class="img-fluid">
             <div class="category-overlay">
               <h3 style="color: aliceblue;">HUGO</h3>
-              <a href="#" class="btn btn-outline-light">Ver colección</a>
+              <router-link to="/coleccion/show" class="btn btn-outline-light">Ver colección</router-link>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@
             <img src="@/plantilla/images/palmR.jpg" alt="Niños" class="img-fluid">
             <div class="category-overlay">
               <h3 style="color: aliceblue;">PALM ANGELS</h3>
-              <a href="#" class="btn btn-outline-light">Ver colección</a>
+              <router-link to="/coleccion/show" class="btn btn-outline-light">Ver colección</router-link>
             </div>
           </div>
         </div>
